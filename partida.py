@@ -1,4 +1,5 @@
 from jugador import Jugador
+from tablero import Tablero
 
 
 class Partida:
@@ -10,6 +11,8 @@ class Partida:
         self.turno = 0
 
         self.empieza = 0
+
+        self.tablero = Tablero()
 
     def agregar_jugador(self, nombre):
 
@@ -30,3 +33,7 @@ class Partida:
         if self.turno >= len(self.jugadores):
 
             self.turno = 0
+
+    def total_jugadores(self):
+
+        return len(self.jugadores)

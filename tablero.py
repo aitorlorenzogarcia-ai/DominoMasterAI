@@ -2,18 +2,30 @@ class Tablero:
 
     def __init__(self):
 
-        self.izquierda = None
+        self.fichas = []
 
-        self.derecha = None
+    def colocar_izquierda(self, ficha):
 
-        self.jugadas = []
+        self.fichas.insert(0, ficha)
+
+    def colocar_derecha(self, ficha):
+
+        self.fichas.append(ficha)
+
+    def izquierda(self):
+
+        if not self.fichas:
+            return None
+
+        return self.fichas[0]
+
+    def derecha(self):
+
+        if not self.fichas:
+            return None
+
+        return self.fichas[-1]
 
     def esta_vacio(self):
-        return self.izquierda is None and self.derecha is None
 
-    def colocar_primera_ficha(self, ficha):
-
-        self.izquierda = ficha.izquierda
-        self.derecha = ficha.derecha
-
-        self.jugadas.append(ficha)
+        return len(self.fichas) == 0
