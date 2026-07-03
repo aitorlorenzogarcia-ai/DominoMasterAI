@@ -1,21 +1,23 @@
 class Jugador:
 
-    def __init__(self, numero):
+    def __init__(self, nombre):
 
-        self.numero = numero
+        self.nombre = nombre
 
-        self.fichas = 7
+        self.mano = []
 
-        self.ha_pasado = False
+    def añadir_ficha(self, ficha):
 
-        self.robos = 0
+        self.mano.append(ficha)
 
-        self.jugadas = []
+    def quitar_ficha(self, ficha):
 
-    def jugar(self, ficha):
-        self.jugadas.append(ficha)
-        self.fichas -= 1
+        self.mano.remove(ficha)
 
-    def robar(self):
-        self.fichas += 1
-        self.robos += 1
+    def tiene_ficha(self, ficha):
+
+        return ficha in self.mano
+
+    def total_fichas(self):
+
+        return len(self.mano)

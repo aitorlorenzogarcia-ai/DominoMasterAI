@@ -1,24 +1,32 @@
+from jugador import Jugador
+
+
 class Partida:
 
     def __init__(self):
 
-        self.modo = "Draw"
+        self.jugadores = []
 
-        self.numero_jugadores = 4
+        self.turno = 0
 
-        self.jugador_local = 1
+        self.empieza = 0
 
-        self.jugador_inicial = 1
+    def agregar_jugador(self, nombre):
 
-        self.turno_actual = 1
+        jugador = Jugador(nombre)
 
-        self.fichas_mano = []
+        self.jugadores.append(jugador)
 
-        self.historial = []
+        return jugador
 
-        self.extremo_izquierdo = None
+    def jugador_actual(self):
 
-        self.extremo_derecho = None
+        return self.jugadores[self.turno]
 
-    def añadir_ficha(self, ficha):
-        self.fichas_mano.append(ficha)
+    def siguiente_turno(self):
+
+        self.turno += 1
+
+        if self.turno >= len(self.jugadores):
+
+            self.turno = 0
