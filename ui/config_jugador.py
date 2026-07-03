@@ -1,9 +1,9 @@
 import tkinter as tk
 
 
-class ConfigJugadores(tk.Frame):
+class ConfigJugador(tk.Frame):
 
-    def __init__(self, master, volver, siguiente):
+    def __init__(self, master, volver, siguiente, numero_jugadores):
 
         super().__init__(master, bg="#1E1E1E")
 
@@ -11,7 +11,7 @@ class ConfigJugadores(tk.Frame):
 
         titulo = tk.Label(
             self,
-            text="Paso 2 de 4\n\nNúmero de jugadores",
+            text="Paso 3 de 4\n\n¿Qué jugador eres?",
             bg="#1E1E1E",
             fg="white",
             font=("Segoe UI", 24, "bold")
@@ -19,15 +19,15 @@ class ConfigJugadores(tk.Frame):
 
         titulo.pack(pady=30)
 
-        self.numero = tk.IntVar(value=4)
+        self.jugador = tk.IntVar(value=1)
 
-        for cantidad in (2, 3, 4):
+        for i in range(1, numero_jugadores + 1):
 
             rb = tk.Radiobutton(
                 self,
-                text=f"{cantidad} jugadores",
-                variable=self.numero,
-                value=cantidad,
+                text=f"Jugador {i}",
+                variable=self.jugador,
+                value=i,
                 bg="#1E1E1E",
                 fg="white",
                 selectcolor="#2E2E2E",
@@ -40,7 +40,7 @@ class ConfigJugadores(tk.Frame):
             self,
             text="Siguiente",
             width=20,
-            command=lambda: siguiente(self.numero.get())
+            command=lambda: siguiente(self.jugador.get())
         ).pack(pady=20)
 
         tk.Button(
