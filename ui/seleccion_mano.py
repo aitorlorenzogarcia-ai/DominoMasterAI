@@ -1,6 +1,7 @@
 import tkinter as tk
 
 from fichas import Ficha
+from ui.componentes import FichaWidget
 
 
 class SeleccionMano(tk.Frame):
@@ -17,7 +18,7 @@ class SeleccionMano(tk.Frame):
 
         titulo = tk.Label(
             self,
-            text="Selecciona tu mano inicial",
+            text="Selecciona tu mano",
             bg="#1E1E1E",
             fg="white",
             font=("Segoe UI", 24, "bold")
@@ -27,7 +28,7 @@ class SeleccionMano(tk.Frame):
 
         self.estado = tk.Label(
             self,
-            text="0 / 7 fichas\n\nTe quedan 7 por elegir.",
+            text="0 / 7 fichas",
             bg="#1E1E1E",
             fg="white",
             font=("Segoe UI", 12)
@@ -49,36 +50,41 @@ class SeleccionMano(tk.Frame):
 
         self.frame_selector.pack()
 
-        self.botones = {}
+        self.widgets_selector = {}
+
+        fila = 0
 
         for izquierda in range(7):
+
+            columna = 0
 
             for derecha in range(izquierda, 7):
 
                 ficha = Ficha(derecha, izquierda)
 
-                boton = tk.Button(
+                widget = FichaWidget(
                     self.frame_selector,
-                    text=str(ficha),
-                    width=8,
-                    command=lambda f=ficha: self.elegir(f)
+                    ficha,
+                    self.elegir
                 )
 
-                boton.grid(
-                    row=izquierda,
-                    column=derecha - izquierda,
-                    padx=3,
-                    pady=3
+                widget.grid(
+                    row=fila,
+                    column=columna,
+                    padx=4,
+                    pady=4
                 )
 
-                self.botones[ficha] = boton
+                self.widgets_selector[ficha] = widget
+
+                columna += 1
+
+            fila += 1
 
         self.boton_comenzar = tk.Button(
             self,
             text="Comenzar partida",
-            width=22,
-            height=2,
-            font=("Segoe UI", 11, "bold"),
+            width=20,
             state="disabled",
             command=self.comenzar_partida
         )
@@ -88,7 +94,7 @@ class SeleccionMano(tk.Frame):
         self.boton_volver = tk.Button(
             self,
             text="Volver",
-            width=22,
+            width=20,
             command=self.volver
         )
 
@@ -96,15 +102,15 @@ class SeleccionMano(tk.Frame):
 
     def elegir(self, ficha):
 
-        if len(self.fichas) >= 7:
+        if ficha in self.fichas:
             return
 
-        if ficha in self.fichas:
+        if len(self.fichas) >= 7:
             return
 
         self.fichas.append(ficha)
 
-        self.botones[ficha].config(state="disabled")
+        self.widgets_selector[ficha].grid_remove()
 
         self.actualizar()
 
@@ -112,7 +118,7 @@ class SeleccionMano(tk.Frame):
 
         self.fichas.remove(ficha)
 
-        self.botones[ficha].config(state="normal")
+        self.widgets_selector[ficha].grid()
 
         self.actualizar()
 
@@ -122,38 +128,26 @@ class SeleccionMano(tk.Frame):
             widget.destroy()
 
         self.fichas.sort(
-            key=lambda ficha: (
-                ficha.izquierda,
-                ficha.derecha
-            ),
+            key=lambda f: (f.izquierda, f.derecha),
             reverse=True
         )
 
         for ficha in self.fichas:
 
-            boton = tk.Button(
+            widget = FichaWidget(
                 self.frame_mano,
-                text=str(ficha),
-                command=lambda f=ficha: self.quitar(f)
+                ficha,
+                self.quitar
             )
 
-            boton.pack(side="left", padx=4)
+            widget.pack(
+                side="left",
+                padx=5
+            )
 
-        quedan = 7 - len(self.fichas)
-
-        if quedan == 0:
-
-            texto = "7 / 7 fichas\n\n¡Mano completa!"
-
-        elif quedan == 1:
-
-            texto = "6 / 7 fichas\n\nSolo falta una ficha."
-
-        else:
-
-            texto = f"{len(self.fichas)} / 7 fichas\n\nTe quedan {quedan} por elegir."
-
-        self.estado.config(text=texto)
+        self.estado.config(
+            text=f"{len(self.fichas)} / 7 fichas"
+        )
 
         if len(self.fichas) == 7:
             self.boton_comenzar.config(state="normal")
